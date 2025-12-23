@@ -19,7 +19,7 @@ export const usePomodoro = () => {
         localStorage.setItem('pomodoro-history', JSON.stringify(history));
     }, [history]);
 
-    // Audio for notifications (optional, can add later)
+    // TODO: Autdio / desktop notifications
 
     const switchMode = useCallback((newMode: TimerMode) => {
         setMode(newMode);

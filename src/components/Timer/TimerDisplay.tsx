@@ -1,6 +1,6 @@
-import { Play, Pause, SkipForward, RotateCcw } from 'lucide-react';
-import type { TimerMode } from '../../types';
-import { formatTime } from '../../utils/format';
+import { Play, Pause, SkipForward, RotateCcw } from "lucide-react";
+import type { TimerMode } from "../../types";
+import { formatTime } from "../../utils/format";
 
 interface TimerDisplayProps {
     timeLeft: number;
@@ -19,9 +19,9 @@ interface TimerButtonProps {
 }
 
 const MODE_LABELS: Record<TimerMode, string> = {
-    focus: 'Focus Time!',
-    shortBreak: 'Short Break',
-    longBreak: 'Long Break',
+    focus: "Focus Time!",
+    shortBreak: "Short Break",
+    longBreak: "Long Break",
 };
 
 const TimerButton = ({ onClick, ariaLabel, children }: TimerButtonProps) => {
@@ -34,10 +34,19 @@ const TimerButton = ({ onClick, ariaLabel, children }: TimerButtonProps) => {
             {children}
         </button>
     );
-}
+};
 
-export function TimerDisplay({ timeLeft, isActive, mode, totalTime, onToggle, onReset, onSkip }: TimerDisplayProps) {
-    const progress = totalTime > 0 ? ((totalTime - timeLeft) / totalTime) * 100 : 0;
+export function TimerDisplay({
+    timeLeft,
+    isActive,
+    mode,
+    totalTime,
+    onToggle,
+    onReset,
+    onSkip,
+}: TimerDisplayProps) {
+    const progress =
+        totalTime > 0 ? ((totalTime - timeLeft) / totalTime) * 100 : 0;
     const radius = 120;
     const circumference = 2 * Math.PI * radius;
     const strokeDashoffset = circumference - (progress / 100) * circumference;
@@ -82,8 +91,15 @@ export function TimerDisplay({ timeLeft, isActive, mode, totalTime, onToggle, on
             </div>
 
             <div className="flex items-center gap-4">
-                <TimerButton onClick={onToggle} ariaLabel={isActive ? 'Pause' : 'Start'}>
-                    {isActive ? <Pause className="w-8 h-8" /> : <Play className="w-8 h-8" />}
+                <TimerButton
+                    onClick={onToggle}
+                    ariaLabel={isActive ? "Pause" : "Start"}
+                >
+                    {isActive ? (
+                        <Pause className="w-8 h-8" />
+                    ) : (
+                        <Play className="w-8 h-8" />
+                    )}
                 </TimerButton>
 
                 <TimerButton onClick={onSkip} ariaLabel="Skip">
