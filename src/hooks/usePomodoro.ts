@@ -1,69 +1,83 @@
-import { useState, useEffect, useCallback } from 'react';
-import type { TimerMode, TimerSettings, SessionLog } from '../types';
-import { DEFAULT_SETTINGS } from '../types';
+import { useState, useEffect, useCallback } from "react";
+import type { TimerMode, TimerSettings, SessionLog } from "../types";
+import { DEFAULT_SETTINGS } from "../types";
 
 export const usePomodoro = () => {
-    const [mode, setMode] = useState<TimerMode>('focus');
-    const [timeLeft, setTimeLeft] = useState(DEFAULT_SETTINGS.focusDuration * 60);
+    const [mode, setMode] = useState<TimerMode>("focus");
+    const [timeLeft, setTimeLeft] = useState(
+        DEFAULT_SETTINGS.focusDuration * 60
+    );
     const [isActive, setIsActive] = useState(false);
     const [sessionsCompleted, setSessionsCompleted] = useState(0);
     const [settings] = useState<TimerSettings>(DEFAULT_SETTINGS);
 
     // Persist sessions in localStorage
     const [history, setHistory] = useState<SessionLog[]>(() => {
-        const saved = localStorage.getItem('pomodoro-history');
+        const saved = localStorage.getItem("pomodoro-history");
         return saved ? JSON.parse(saved) : [];
     });
 
     useEffect(() => {
-        localStorage.setItem('pomodoro-history', JSON.stringify(history));
+        localStorage.setItem("pomodoro-history", JSON.stringify(history));
     }, [history]);
 
     // TODO: Autdio / desktop notifications
 
-    const switchMode = useCallback((newMode: TimerMode) => {
-        setMode(newMode);
-        switch (newMode) {
-            case 'focus':
-                setTimeLeft(settings.focusDuration * 60);
-                break;
-            case 'shortBreak':
-                setTimeLeft(settings.shortBreakDuration * 60);
-                break;
-            case 'longBreak':
-                setTimeLeft(settings.longBreakDuration * 60);
-                break;
-        }
-        setIsActive(false);
-    }, [settings]);
-
-    const handleTimerComplete = useCallback((elapsedOverride?: number) => {
-        setIsActive(false);
-
-        // Log session if it was a focus session
-        if (mode === 'focus') {
-            const duration = elapsedOverride !== undefined ? elapsedOverride : settings.focusDuration * 60;
-            const newSession: SessionLog = {
-                id: crypto.randomUUID(),
-                startTime: new Date().toISOString(),
-                duration: duration,
-                mode: 'focus',
-                completed: true
-            };
-            setHistory(prev => [...prev, newSession]);
-
-            const newCompleted = sessionsCompleted + 1;
-            setSessionsCompleted(newCompleted);
-
-            if (newCompleted % settings.longBreakInterval === 0) {
-                switchMode('longBreak');
-            } else {
-                switchMode('shortBreak');
+    const switchMode = useCallback(
+        (newMode: TimerMode) => {
+            setMode(newMode);
+            switch (newMode) {
+                case "focus":
+                    setTimeLeft(settings.focusDuration * 60);
+                    break;
+                case "shortBreak":
+                    setTimeLeft(settings.shortBreakDuration * 60);
+                    break;
+                case "longBreak":
+                    setTimeLeft(settings.longBreakDuration * 60);
+                    break;
             }
-        } else {
-            switchMode('focus');
-        }
-    }, [mode, sessionsCompleted, settings, switchMode]);
+            setIsActive(false);
+        },
+        [settings]
+    );
+
+    const handleTimerComplete = useCallback(
+        (elapsedOverride?: number) => {
+            setIsActive(false);
+
+            // Log session if it was a focus session and >= 1min
+            if (mode === "focus") {
+                const duration =
+                    elapsedOverride !== undefined
+                        ? elapsedOverride
+                        : settings.focusDuration * 60;
+
+                if (duration < 60) return;
+
+                const newSession: SessionLog = {
+                    id: crypto.randomUUID(),
+                    startTime: new Date().toISOString(),
+                    duration: duration,
+                    mode: "focus",
+                    completed: true,
+                };
+                setHistory((prev) => [...prev, newSession]);
+
+                const newCompleted = sessionsCompleted + 1;
+                setSessionsCompleted(newCompleted);
+
+                if (newCompleted % settings.longBreakInterval === 0) {
+                    switchMode("longBreak");
+                } else {
+                    switchMode("shortBreak");
+                }
+            } else {
+                switchMode("focus");
+            }
+        },
+        [mode, sessionsCompleted, settings, switchMode]
+    );
 
     useEffect(() => {
         let interval: number | undefined;
@@ -84,13 +98,13 @@ export const usePomodoro = () => {
     const resetTimer = () => {
         setIsActive(false);
         switch (mode) {
-            case 'focus':
+            case "focus":
                 setTimeLeft(settings.focusDuration * 60);
                 break;
-            case 'shortBreak':
+            case "shortBreak":
                 setTimeLeft(settings.shortBreakDuration * 60);
                 break;
-            case 'longBreak':
+            case "longBreak":
                 setTimeLeft(settings.longBreakDuration * 60);
                 break;
         }
@@ -98,8 +112,8 @@ export const usePomodoro = () => {
 
     const skipTimer = () => {
         let totalTime = settings.focusDuration * 60;
-        if (mode === 'shortBreak') totalTime = settings.shortBreakDuration * 60;
-        if (mode === 'longBreak') totalTime = settings.longBreakDuration * 60;
+        if (mode === "shortBreak") totalTime = settings.shortBreakDuration * 60;
+        if (mode === "longBreak") totalTime = settings.longBreakDuration * 60;
 
         const elapsed = totalTime - timeLeft;
         handleTimerComplete(elapsed);
@@ -114,6 +128,6 @@ export const usePomodoro = () => {
         toggleTimer,
         resetTimer,
         skipTimer,
-        settings // Return settings if we want to display them
+        settings,
     };
 };
