@@ -62,15 +62,7 @@ export function WeeklyView({ history }: WeeklyViewProps) {
                         axisLine={false}
                         tickFormatter={(value) => `${value}h`}
                     />
-                    <Tooltip
-                        cursor={{ fill: "var(--background)", opacity: 0.2 }}
-                        contentStyle={{
-                            backgroundColor: "var(--foreground)",
-                            borderColor: "var(--border)",
-                            color: "var(--background)",
-                            borderRadius: "8px",
-                        }}
-                    />
+
                     <Bar dataKey="hours" radius={[4, 4, 0, 0]}>
                         {data.map((_, index) => (
                             <Cell
