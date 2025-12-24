@@ -3,6 +3,7 @@ import "react-calendar-heatmap/dist/styles.css";
 import type { SessionLog } from "../../types";
 import { useMemo } from "react";
 import { subDays, format, parseISO } from "date-fns";
+import { Activity } from "lucide-react";
 
 interface HeatmapProps {
     history: SessionLog[];
@@ -31,8 +32,8 @@ export default function Heatmap({ history }: HeatmapProps) {
 
     return (
         <div className="w-full">
-            <h3 className="text-lg font-semibold mb-4 text-foreground">
-                Monthly Activity
+            <h3 className="text-lg font-semibold mb-4 text-foreground flex items-center gap-2 uppercase font-mono">
+                Your Activity in the last month <Activity size={24} />
             </h3>
             <div className="heatmap-container">
                 <CalendarHeatmap

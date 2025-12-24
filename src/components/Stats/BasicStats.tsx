@@ -1,6 +1,7 @@
 import { parseISO, format, isToday, differenceInCalendarDays } from "date-fns";
 import type { SessionLog } from "../../types";
 import { formatTime } from "../../utils/format";
+import { ChartColumn } from "lucide-react";
 
 interface BasicStatsProps {
     history: SessionLog[];
@@ -69,8 +70,8 @@ export default function BasicStats({ history }: BasicStatsProps) {
 
     return (
         <div className="w-full">
-            <h3 className="text-lg font-semibold mb-4 text-foreground">
-                Stats
+            <h3 className="text-lg font-semibold mb-4 text-foreground flex items-center gap-2 uppercase font-mono">
+                Stats <ChartColumn size={24} />
             </h3>
             <div className="flex flex-row items-center justify-around">
                 {stats.map(({ label, value }) => (

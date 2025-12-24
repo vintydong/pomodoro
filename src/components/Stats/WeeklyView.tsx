@@ -1,6 +1,7 @@
 import { startOfWeek, addDays, format, isSameDay, parseISO } from "date-fns";
 import type { SessionLog } from "../../types";
 import { formatDuration } from "../../utils/format";
+import { CalendarDays } from "lucide-react";
 
 interface WeeklyViewProps {
     history: SessionLog[];
@@ -66,14 +67,7 @@ const DayColumns = ({
                                 key={session.id}
                                 className="absolute left-1 right-1 rounded bg-tertiary/20 border border-tertiary/30 px-2 overflow-hidden text-xs/6 leading-4 hover:bg-tertiary/30 transition-colors"
                                 style={getSessionStyle(session)}
-                                title={`Focus Session: ${formatDuration(
-                                    session.duration
-                                )}`}
-                            >
-                                <div className="font-semibold truncate">
-                                    Focus: {formatDuration(session.duration)}
-                                </div>
-                            </div>
+                            ></div>
                         ))}
                 </div>
             ))}
@@ -83,18 +77,15 @@ const DayColumns = ({
 
 export default function WeeklyView({ history }: WeeklyViewProps) {
     const today = new Date();
-    const startOfCurrentWeek = startOfWeek(today, { weekStartsOn: 0 }); // Sunday
+    const startOfCurrentWeek = startOfWeek(today, { weekStartsOn: 0 });
     const endofWeek = addDays(startOfCurrentWeek, 7);
 
-    // Generate dates for the week
     const weekDates = Array.from({ length: 7 }, (_, i) =>
         addDays(startOfCurrentWeek, i)
     );
 
-    // Hours for the left gutter
     const hours = Array.from({ length: 24 }, (_, i) => i);
 
-    // Filter relevant sessions (focus mode, completed, within this week)
     const weekSessions = history.filter((session) => {
         if (!session.completed || session.mode !== "focus") return false;
         const sessionDate = parseISO(session.startTime);
@@ -120,9 +111,9 @@ export default function WeeklyView({ history }: WeeklyViewProps) {
 
     return (
         <div className="flex flex-col h-[600px] w-full rounded-lg overflow-hidden">
-            <div className="p-4 flex justify-between items-center">
-                <h3 className="text-lg font-semibold text-foreground">
-                    Your Week
+            <div className="flex mb-4 justify-between items-center">
+                <h3 className="text-lg font-semibold text-foreground flex items-center gap-2 uppercase font-mono">
+                    Your sessions in the last week <CalendarDays size={24} />
                 </h3>
                 <span className="text-xs opacity-50">
                     {format(weekDates[0], "MMM d")} -{" "}
@@ -136,9 +127,7 @@ export default function WeeklyView({ history }: WeeklyViewProps) {
                 <div className="flex relative min-h-[960px]">
                     <TimeGutter hours={hours} />
 
-                    {/* Grid Columns */}
                     <div className="flex flex-1 relative">
-                        {/* Horizontal Hour Lines */}
                         <div className="absolute inset-0 pointer-events-none">
                             {hours.map((hour) => (
                                 <div
