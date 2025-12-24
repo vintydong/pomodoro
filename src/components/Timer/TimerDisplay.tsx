@@ -30,7 +30,7 @@ const TimerButton = ({ onClick, ariaLabel, children }: TimerButtonProps) => {
     return (
         <button
             onClick={onClick}
-            className="p-4 rounded-full text-tertiary hover:opacity-90 transition-opacity disabled:opacity-50"
+            className="p-4 rounded-full text-tertiary hover:text-accent cursor-pointer transition-all disabled:opacity-50"
             aria-label={ariaLabel}
         >
             {children}
@@ -38,7 +38,7 @@ const TimerButton = ({ onClick, ariaLabel, children }: TimerButtonProps) => {
     );
 };
 
-export function TimerDisplay({
+export default function TimerDisplay({
     timeLeft,
     isActive,
     mode,
@@ -50,7 +50,7 @@ export function TimerDisplay({
     const progress = totalTime > 0 ? (timeLeft / totalTime) * 100 : 0;
     return (
         <div className="flex flex-col items-center justify-center space-y-8">
-            <div className="text-xl font-medium text-foreground uppercase">
+            <div className="text-2xl font-bold text-foreground">
                 {MODE_LABELS[mode]}
             </div>
 

@@ -1,9 +1,10 @@
 import { usePomodoro } from "./hooks/usePomodoro";
-import { TimerDisplay } from "./components/Timer/TimerDisplay";
-import { WeeklyView } from "./components/Stats/WeeklyView";
-import { Heatmap } from "./components/Stats/Heatmap";
+import TimerDisplay from "./components/Timer/TimerDisplay";
+import WeeklyView from "./components/Stats/WeeklyView";
+import Heatmap from "./components/Stats/Heatmap";
+import BasicStats from "./components/Stats/BasicStats";
 import { ThemeProvider } from "./context/ThemeContext";
-import { ThemeToggle } from "./components/ThemeToggle";
+import ThemeToggle from "./components/ThemeToggle";
 import { Timer } from "lucide-react";
 
 function AppContent() {
@@ -50,31 +51,19 @@ function AppContent() {
                 </section>
 
                 <section className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                    <h2 className="text-2xl font-bold tracking-tight">
+                    {/* <h2 className="text-2xl font-bold tracking-tight">
                         Productivity Stats
-                    </h2>
+                    </h2> */}
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="p-6 rounded-xl border shadow-sm">
-                            <WeeklyView history={history} />
-                        </div>
-                        <div className="p-6 rounded-xl border shadow-sm flex flex-col justify-center">
-                            <div className="text-center space-y-2">
-                                <div className="text-4xl font-bold">
-                                    {
-                                        history.filter(
-                                            (s) =>
-                                                s.completed &&
-                                                s.mode === "focus"
-                                        ).length
-                                    }
-                                </div>
-                                <div>Focus Sessions Completed</div>
-                            </div>
-                        </div>
+                    <div className="p-4 rounded-xl border shadow-sm justify-center">
+                        <BasicStats history={history} />
                     </div>
 
-                    <div className="p-6 rounded-xl border shadow-sm overflow-hidden">
+                    <div className="p-4 rounded-xl border shadow-sm">
+                        <WeeklyView history={history} />
+                    </div>
+
+                    <div className="p-4 rounded-xl border shadow-sm overflow-hidden">
                         <Heatmap history={history} />
                     </div>
                 </section>

@@ -3,7 +3,6 @@ import {
     Bar,
     XAxis,
     YAxis,
-    Tooltip,
     ResponsiveContainer,
     Cell,
 } from "recharts";
@@ -15,7 +14,7 @@ interface WeeklyViewProps {
     history: SessionLog[];
 }
 
-export function WeeklyView({ history }: WeeklyViewProps) {
+export default function WeeklyView({ history }: WeeklyViewProps) {
     const data = useMemo(() => {
         const today = new Date();
         const start = startOfWeek(today, { weekStartsOn: 0 });

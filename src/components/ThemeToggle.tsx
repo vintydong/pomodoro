@@ -1,16 +1,16 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 
-export function ThemeToggle() {
+export default function ThemeToggle() {
     const { theme, setTheme } = useTheme();
 
     return (
         <button
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-            className="p-2 rounded-full cursor-pointer transition-colors hover:opacity-80"
+            className="p-2 rounded-full cursor-pointer transition-colors"
             aria-label="Toggle theme"
         >
-            <div className="relative w-5 h-5 text-tertiary">
+            <div className="relative w-5 h-5 text-tertiary hover:text-accent">
                 <Sun
                     className={`absolute h-6 w-6 transition-all  ${
                         theme === "dark"

@@ -8,7 +8,7 @@ interface HeatmapProps {
     history: SessionLog[];
 }
 
-export function Heatmap({ history }: HeatmapProps) {
+export default function Heatmap({ history }: HeatmapProps) {
     const values = useMemo(() => {
         // Group history by date
         const dailyCounts: Record<string, number> = {};
