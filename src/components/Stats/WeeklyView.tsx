@@ -1,6 +1,5 @@
 import { startOfWeek, addDays, format, isSameDay, parseISO } from "date-fns";
 import type { SessionLog } from "../../types";
-import { formatDuration } from "../../utils/format";
 import { CalendarDays } from "lucide-react";
 
 interface WeeklyViewProps {

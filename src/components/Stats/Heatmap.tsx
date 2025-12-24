@@ -32,33 +32,45 @@ export default function Heatmap({ history }: HeatmapProps) {
 
     return (
         <div className="w-full">
-            <h3 className="text-lg font-semibold mb-4 text-foreground flex items-center gap-2 uppercase font-mono">
-                Your Activity in the last month <Activity size={24} />
-            </h3>
+            <div className="flex mb-4 justify-between items-center">
+                <h3 className="text-lg font-semibold text-foreground flex items-center gap-2 uppercase font-mono">
+                    Your Activity - last 100 days <Activity size={24} />
+                </h3>
+                <div className="text-xs flex items-center">
+                    <span className="mr-2 opacity-50">Less</span>
+                    {Array.from({ length: 5 }).map((_, i) => (
+                        <span
+                            key={i}
+                            className={`w-4 h-4 inline-block bg-tertiary color-scale-${i}`}
+                        />
+                    ))}
+                    <span className="ml-2 opacity-50">More</span>
+                </div>
+            </div>
+
             <div className="heatmap-container">
                 <CalendarHeatmap
-                    startDate={subDays(today, 100)} // Last 100 days
+                    startDate={subDays(today, 100)}
                     endDate={today}
                     values={values}
                     classForValue={(value) => {
                         if (!value) {
-                            return "color-empty";
+                            return "color color-scale-0";
                         }
-                        // Assuming max ~8 hours
-                        if (value.count < 1) return "color-scale-1";
-                        if (value.count < 3) return "color-scale-2";
-                        if (value.count < 5) return "color-scale-3";
-                        return "color-scale-4";
+                        if (value.count < 1) return "color color-scale-1";
+                        if (value.count < 3) return "color color-scale-2";
+                        if (value.count < 5) return "color color-scale-3";
+                        return "color color-scale-4";
                     }}
                     tooltipDataAttrs={(value: any) => {
                         return {
                             "data-tip": value?.date
-                                ? `${value.date}: ${value.count} hrs`
-                                : "No data",
+                                ? `${value.date} - ${value.count} hrs`
+                                : "",
                         } as any;
                     }}
-                    showWeekdayLabels
                     showOutOfRangeDays
+                    gutterSize={0.75}
                 />
             </div>
         </div>

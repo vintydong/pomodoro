@@ -26,26 +26,30 @@ body {
     background-color: var(--background);
 }
 
-.heatmap-container text {
-    font-size: 10px;
+.heatmap-container .react-calendar-heatmap text {
+    font-size: 5px;
+    color: var(--foreground);
 }
 
-.react-calendar-heatmap .color-empty {
-    opacity: 0.3;
+.react-calendar-heatmap .color {
+    fill: var(--color-tertiary);
 }
 
-.react-calendar-heatmap .color-scale-1 {
-    opacity: 0.4;
+.color-scale-0 {
+    opacity: 0.05;
 }
 
-.react-calendar-heatmap .color-scale-2 {
-    opacity: 0.6;
+.color-scale-1 {
+    opacity: 0.2;
 }
 
-.react-calendar-heatmap .color-scale-3 {
-    opacity: 0.8;
+.color-scale-2 {
+    opacity: 0.5;
 }
 
-.react-calendar-heatmap .color-scale-4 {
+.color-scale-3 {
+    opacity: 0.75;
+}
+.color-scale-4 {
     opacity: 1;
 }
