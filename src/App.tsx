@@ -28,7 +28,7 @@ function AppContent() {
 
     return (
         <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
-            <header className="container mx-auto p-4 max-w-4xl flex justify-between items-center bg-background/80 backdrop-blur-sm z-10 border-b">
+            <header className="container mx-auto p-4 max-w-4xl flex justify-between items-center">
                 <div className="flex items-center gap-2 font-bold text-xl">
                     <Timer className="w-6 h-6" />
                     <span>Pomodoro</span>
@@ -55,10 +55,10 @@ function AppContent() {
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="p-6 rounded-xl border bg-card text-card-foreground shadow-sm">
+                        <div className="p-6 rounded-xl border shadow-sm">
                             <WeeklyView history={history} />
                         </div>
-                        <div className="p-6 rounded-xl border bg-card text-card-foreground shadow-sm flex flex-col justify-center">
+                        <div className="p-6 rounded-xl border shadow-sm flex flex-col justify-center">
                             <div className="text-center space-y-2">
                                 <div className="text-4xl font-bold">
                                     {
@@ -69,14 +69,12 @@ function AppContent() {
                                         ).length
                                     }
                                 </div>
-                                <div className="text-muted-foreground">
-                                    Focus Sessions Completed
-                                </div>
+                                <div>Focus Sessions Completed</div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="p-6 rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden">
+                    <div className="p-6 rounded-xl border shadow-sm overflow-hidden">
                         <Heatmap history={history} />
                     </div>
                 </section>

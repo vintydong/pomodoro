@@ -50,30 +50,33 @@ export function WeeklyView({ history }: WeeklyViewProps) {
                 <BarChart data={data}>
                     <XAxis
                         dataKey="name"
-                        stroke="var(--muted-foreground)"
+                        stroke="var(--foreground)"
                         fontSize={12}
                         tickLine={false}
                         axisLine={false}
                     />
                     <YAxis
-                        stroke="var(--muted-foreground)"
+                        stroke="var(--foreground)"
                         fontSize={12}
                         tickLine={false}
                         axisLine={false}
                         tickFormatter={(value) => `${value}h`}
                     />
                     <Tooltip
-                        cursor={{ fill: "var(--muted)", opacity: 0.2 }}
+                        cursor={{ fill: "var(--background)", opacity: 0.2 }}
                         contentStyle={{
-                            backgroundColor: "var(--card)",
+                            backgroundColor: "var(--foreground)",
                             borderColor: "var(--border)",
-                            color: "var(--card-foreground)",
+                            color: "var(--background)",
                             borderRadius: "8px",
                         }}
                     />
                     <Bar dataKey="hours" radius={[4, 4, 0, 0]}>
                         {data.map((_, index) => (
-                            <Cell key={`cell-${index}`} fill="var(--primary)" />
+                            <Cell
+                                key={`cell-${index}`}
+                                fill="var(--color-tertiary)"
+                            />
                         ))}
                     </Bar>
                 </BarChart>
