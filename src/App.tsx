@@ -4,6 +4,7 @@ import WeeklyView from "./components/Stats/WeeklyView";
 import Heatmap from "./components/Stats/Heatmap";
 import BasicStats from "./components/Stats/BasicStats";
 import { ThemeProvider } from "./context/ThemeContext";
+import { PomodoroProvider } from "./context/PomodoroContext";
 import ThemeToggle from "./components/ThemeToggle";
 import { Timer } from "lucide-react";
 
@@ -19,10 +20,6 @@ function AppContent() {
         settings,
     } = usePomodoro();
 
-    // Calculate total time for the current mode to pass to TimerDisplay for progress
-    // This is a bit tricky as usePomodoro might need to export the original duration or we calculate it.
-    // For simplicity, we can infer it or check settings.
-    // Let's assume settings values.
     let totalTime = settings.focusDuration * 60;
     if (mode === "shortBreak") totalTime = settings.shortBreakDuration * 60;
     if (mode === "longBreak") totalTime = settings.longBreakDuration * 60;
@@ -51,10 +48,6 @@ function AppContent() {
                 </section>
 
                 <section className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                    {/* <h2 className="text-2xl font-bold tracking-tight">
-                        Productivity Stats
-                    </h2> */}
-
                     <div className="p-4 rounded-xl border shadow-sm justify-center">
                         <BasicStats history={history} />
                     </div>
@@ -75,7 +68,9 @@ function AppContent() {
 function App() {
     return (
         <ThemeProvider defaultTheme="light" storageKey="pomodoro-theme">
-            <AppContent />
+            <PomodoroProvider>
+                <AppContent />
+            </PomodoroProvider>
         </ThemeProvider>
     );
 }

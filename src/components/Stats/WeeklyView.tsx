@@ -1,6 +1,7 @@
 import { startOfWeek, addDays, format, isSameDay, parseISO } from "date-fns";
 import type { SessionLog } from "../../types";
 import { CalendarDays } from "lucide-react";
+import { Tooltip } from "react-tooltip";
 
 interface WeeklyViewProps {
     history: SessionLog[];
@@ -52,6 +53,26 @@ const DayColumns = ({
     weekSessions: SessionLog[];
     getSessionStyle: (session: SessionLog) => { top: string; height: string };
 }) => {
+    const sessionToComponent = (session: SessionLog) => {
+        const startTime = format(parseISO(session.startTime), "HH:mm");
+        const durationMins = Math.floor(session.duration / 60);
+        const tooltipContent = `${startTime} - ${durationMins} min${
+            durationMins === 1 ? "" : "s"
+        }`;
+
+        if (durationMins <= 0) return <></>;
+
+        return (
+            <div
+                key={session.id}
+                className="absolute left-1 right-1 rounded bg-tertiary/20 border border-tertiary/30 px-2 overflow-hidden text-xs/6 leading-4 hover:bg-tertiary/30 transition-colors"
+                style={getSessionStyle(session)}
+                data-tooltip-id="weekly-tooltip"
+                data-tooltip-content={tooltipContent}
+            />
+        );
+    };
+
     return (
         <>
             {weekDates.map((date) => (
@@ -61,13 +82,7 @@ const DayColumns = ({
                 >
                     {weekSessions
                         .filter((s) => isSameDay(parseISO(s.startTime), date))
-                        .map((session) => (
-                            <div
-                                key={session.id}
-                                className="absolute left-1 right-1 rounded bg-tertiary/20 border border-tertiary/30 px-2 overflow-hidden text-xs/6 leading-4 hover:bg-tertiary/30 transition-colors"
-                                style={getSessionStyle(session)}
-                            ></div>
-                        ))}
+                        .map(sessionToComponent)}
                 </div>
             ))}
         </>
@@ -100,7 +115,7 @@ export default function WeeklyView({ history }: WeeklyViewProps) {
         // Min height of 25px
         const hourHeight = 60;
         const top = (minutesFromStartOfDay / 60) * hourHeight;
-        const height = (durationInMinutes / 60) * hourHeight;
+        const height = Math.max((durationInMinutes / 60) * hourHeight, 15);
 
         return {
             top: `${top}px`,
@@ -141,6 +156,7 @@ export default function WeeklyView({ history }: WeeklyViewProps) {
                             weekSessions={weekSessions}
                             getSessionStyle={getSessionStyle}
                         />
+                        <Tooltip id="weekly-tooltip" />
                     </div>
                 </div>
             </div>

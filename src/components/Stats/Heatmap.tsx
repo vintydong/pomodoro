@@ -4,6 +4,7 @@ import type { SessionLog } from "../../types";
 import { useMemo } from "react";
 import { subDays, format, parseISO } from "date-fns";
 import { Activity } from "lucide-react";
+import { Tooltip } from "react-tooltip";
 
 interface HeatmapProps {
     history: SessionLog[];
@@ -64,14 +65,16 @@ export default function Heatmap({ history }: HeatmapProps) {
                     }}
                     tooltipDataAttrs={(value: any) => {
                         return {
-                            "data-tip": value?.date
+                            "data-tooltip-content": value?.date
                                 ? `${value.date} - ${value.count} hrs`
                                 : "",
+                            "data-tooltip-id": "heatmap-tooltip",
                         } as any;
                     }}
                     showOutOfRangeDays
                     gutterSize={0.75}
                 />
+                <Tooltip id="heatmap-tooltip" />
             </div>
         </div>
     );
