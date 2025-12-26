@@ -1,4 +1,4 @@
-export type TimerMode = 'focus' | 'shortBreak' | 'longBreak';
+export type TimerMode = "focus" | "shortBreak" | "longBreak";
 
 export interface SessionLog {
     id: string;
@@ -13,6 +13,8 @@ export interface TimerSettings {
     shortBreakDuration: number;
     longBreakDuration: number;
     longBreakInterval: number;
+    autoFocus: boolean;
+    autoBreak: boolean;
 }
 
 export const DEFAULT_SETTINGS: TimerSettings = {
@@ -20,4 +22,6 @@ export const DEFAULT_SETTINGS: TimerSettings = {
     shortBreakDuration: 5,
     longBreakDuration: 15,
     longBreakInterval: 4,
+    autoFocus: false,
+    autoBreak: false,
 };

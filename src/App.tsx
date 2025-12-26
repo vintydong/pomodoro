@@ -1,12 +1,13 @@
-import { usePomodoro } from "./hooks/usePomodoro";
 import TimerDisplay from "./components/Timer/TimerDisplay";
 import WeeklyView from "./components/Stats/WeeklyView";
 import Heatmap from "./components/Stats/Heatmap";
 import BasicStats from "./components/Stats/BasicStats";
 import { ThemeProvider } from "./context/ThemeContext";
-import { PomodoroProvider } from "./context/PomodoroContext";
+import { usePomodoro, PomodoroProvider } from "./context/PomodoroContext";
 import ThemeToggle from "./components/ThemeToggle";
+import { Settings, SettingsModal } from "./components/Settings";
 import { Timer } from "lucide-react";
+import { useState } from "react";
 
 function AppContent() {
     const {
@@ -19,6 +20,7 @@ function AppContent() {
         history,
         settings,
     } = usePomodoro();
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
     let totalTime = settings.focusDuration * 60;
     if (mode === "shortBreak") totalTime = settings.shortBreakDuration * 60;
@@ -31,7 +33,10 @@ function AppContent() {
                     <Timer className="w-6 h-6" />
                     <span>Pomodoro</span>
                 </div>
-                <ThemeToggle />
+                <div className="flex items-center gap-2">
+                    <ThemeToggle />
+                    <Settings onOpen={() => setIsSettingsOpen(true)} />
+                </div>
             </header>
 
             <main className="container mx-auto px-4 pt-24 pb-12 max-w-4xl space-y-12">
@@ -60,6 +65,12 @@ function AppContent() {
                         <Heatmap history={history} />
                     </div>
                 </section>
+
+                {isSettingsOpen && (
+                    <section>
+                        <SettingsModal setIsSettingsOpen={setIsSettingsOpen} />
+                    </section>
+                )}
             </main>
         </div>
     );

@@ -2,7 +2,7 @@ import { parseISO, format, isToday, differenceInCalendarDays } from "date-fns";
 import type { SessionLog } from "../../types";
 import { formatTime } from "../../utils/format";
 import { ChartColumn, Download, Trash2, Upload } from "lucide-react";
-import { usePomodoro } from "../../hooks/usePomodoro";
+import { usePomodoro } from "../../context/PomodoroContext";
 
 interface BasicStatsProps {
     history: SessionLog[];

@@ -4,9 +4,21 @@ import {
     useEffect,
     useCallback,
     type ReactNode,
+    useContext,
 } from "react";
 import type { TimerMode, TimerSettings, SessionLog } from "../types";
 import { DEFAULT_SETTINGS } from "../types";
+
+// Audio asset paths (replace with your actual sound files)
+const FOCUS_END_SOUND = "/focus.mp3";
+const BREAK_END_SOUND = "/break.mp3";
+
+const playSound = (url: string) => {
+    const audio = new Audio(url);
+    audio.play().catch((error) => {
+        console.error("Error playing audio:", error);
+    });
+};
 
 interface PomodoroContextType {
     mode: TimerMode;
@@ -21,6 +33,7 @@ interface PomodoroContextType {
     deleteData: () => void;
     importData: (data: SessionLog[]) => void;
     setMode: (mode: TimerMode) => void;
+    updateSettings: (settings: Partial<TimerSettings>) => void;
 }
 
 export const PomodoroContext = createContext<PomodoroContextType | undefined>(
@@ -34,7 +47,7 @@ export const PomodoroProvider = ({ children }: { children: ReactNode }) => {
     );
     const [isActive, setIsActive] = useState(false);
     const [sessionsCompleted, setSessionsCompleted] = useState(0);
-    const [settings] = useState<TimerSettings>(DEFAULT_SETTINGS);
+    const [settings, _setSettings] = useState<TimerSettings>(DEFAULT_SETTINGS);
 
     // Persist sessions in localStorage
     const [history, setHistory] = useState<SessionLog[]>(() => {
@@ -45,6 +58,11 @@ export const PomodoroProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         localStorage.setItem("pomodoro-history", JSON.stringify(history));
     }, [history]);
+
+    useEffect(() => {
+        localStorage.setItem("pomodoro-settings", JSON.stringify(settings));
+        resetTimer();
+    }, [settings]);
 
     const switchMode = useCallback(
         (newMode: TimerMode) => {
@@ -97,6 +115,13 @@ export const PomodoroProvider = ({ children }: { children: ReactNode }) => {
                 }
             } else {
                 switchMode("focus");
+            }
+
+            // Play notification sound
+            if (mode === "focus") {
+                playSound(FOCUS_END_SOUND);
+            } else {
+                playSound(BREAK_END_SOUND);
             }
         },
         [mode, sessionsCompleted, settings, switchMode]
@@ -152,6 +177,10 @@ export const PomodoroProvider = ({ children }: { children: ReactNode }) => {
         setHistory(data);
     };
 
+    const updateSettings = (newSettings: Partial<TimerSettings>) => {
+        _setSettings((oldSettings) => ({ ...oldSettings, ...newSettings }));
+    };
+
     return (
         <PomodoroContext.Provider
             value={{
@@ -167,9 +196,18 @@ export const PomodoroProvider = ({ children }: { children: ReactNode }) => {
                 deleteData,
                 importData,
                 setMode,
+                updateSettings,
             }}
         >
             {children}
         </PomodoroContext.Provider>
     );
+};
+
+export const usePomodoro = () => {
+    const context = useContext(PomodoroContext);
+    if (context === undefined) {
+        throw new Error("usePomodoro must be used within a PomodoroProvider");
+    }
+    return context;
 };
