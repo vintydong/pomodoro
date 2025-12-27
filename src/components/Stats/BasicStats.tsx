@@ -1,8 +1,17 @@
 import { parseISO, format, isToday, differenceInCalendarDays } from "date-fns";
 import type { SessionLog } from "../../types";
 import { formatTime } from "../../utils/format";
-import { ChartColumn, Download, Trash2, Upload } from "lucide-react";
+import {
+    ChartColumn,
+    CheckIcon,
+    Download,
+    Trash2,
+    Upload,
+    XIcon,
+} from "lucide-react";
 import { usePomodoro } from "../../context/PomodoroContext";
+import { useState } from "react";
+import { Tooltip } from "react-tooltip";
 
 interface BasicStatsProps {
     history: SessionLog[];
@@ -28,10 +37,36 @@ const Button = ({ onClick, ariaLabel, children }: ButtonProps) => {
 
 const DeleteButton = () => {
     const { deleteData } = usePomodoro();
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <Button onClick={deleteData} ariaLabel="Delete all data">
-            <Trash2 size={24} />
+        <Button ariaLabel="Delete all data" onClick={() => setIsOpen(true)}>
+            <Trash2
+                size={24}
+                data-tooltip-id="delete-tooltip"
+                className="opacity-50"
+            />
+            <Tooltip
+                id="delete-tooltip"
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                openOnClick
+                clickable
+                place="bottom"
+                className="delete-tooltip"
+            >
+                <div
+                    className="flex flex-row gap-2 items-center"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setIsOpen(false);
+                    }}
+                >
+                    <div className="text-xs">Delete all data?</div>
+                    <CheckIcon size={16} onClick={() => deleteData()} />
+                    <XIcon size={16} />
+                </div>
+            </Tooltip>
         </Button>
     );
 };
@@ -54,7 +89,7 @@ const DownloadButton = () => {
 
     return (
         <Button onClick={downloadData} ariaLabel="Download data">
-            <Download size={24} />
+            <Download size={24} className="opacity-50" />
         </Button>
     );
 };
@@ -82,7 +117,7 @@ const UploadButton = () => {
 
     return (
         <Button onClick={uploadData} ariaLabel="Upload data">
-            <Upload size={24} />
+            <Upload size={24} className="opacity-50" />
         </Button>
     );
 };
@@ -154,7 +189,7 @@ export default function BasicStats({ history }: BasicStatsProps) {
                 <h3 className="text-lg font-semibold text-foreground flex items-center gap-2 uppercase font-mono">
                     Stats <ChartColumn size={24} />
                 </h3>
-                <span className="text-xs opacity-50 flex gap-2">
+                <span className="text-xs flex gap-2">
                     <DeleteButton />
                     <DownloadButton />
                     <UploadButton />

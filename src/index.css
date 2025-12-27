@@ -53,3 +53,8 @@ body {
 .color-scale-4 {
     opacity: 1;
 }
+
+.delete-tooltip.delete-tooltip {
+    background-color: var(--color-tertiary);
+    z-index: 10;
+}
