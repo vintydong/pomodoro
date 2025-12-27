@@ -8,6 +8,7 @@ import {
 } from "react";
 import type { TimerMode, TimerSettings, SessionLog } from "../types";
 import { DEFAULT_SETTINGS } from "../types";
+import { formatTime } from "../utils/format";
 
 // Audio asset paths (replace with your actual sound files)
 const FOCUS_END_SOUND = "/focus.mp3";
@@ -132,6 +133,7 @@ export const PomodoroProvider = ({ children }: { children: ReactNode }) => {
 
         if (isActive && timeLeft > 0) {
             interval = window.setInterval(() => {
+                document.title = `Pomodoro - ${formatTime(timeLeft - 1)}`;
                 setTimeLeft((prev) => prev - 1);
             }, 1000);
         } else if (isActive && timeLeft === 0) {
