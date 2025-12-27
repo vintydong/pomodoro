@@ -1,6 +1,7 @@
 import { SettingsIcon, XIcon } from "lucide-react";
 import { usePomodoro } from "../context/PomodoroContext";
 import { useState } from "react";
+import type { TimerSettings } from "../types";
 
 interface SettingsProps {
     onOpen: () => void;
@@ -60,7 +61,7 @@ const SettingsInput = ({ label, value, onChange }: SettingsInputProps) => {
             <div className="text-xs opacity-50">{label}</div>
             <input
                 value={value}
-                className="rounded-2xl p-2 w-32 bg-tertiary/25 focus:outline-tertiary focus:outline-2"
+                className="rounded-2xl p-2 w-20 text-center bg-tertiary/25 focus:outline-tertiary focus:outline-2"
                 onChange={onChange}
             />
         </div>
@@ -85,13 +86,35 @@ export function SettingsModal({ setIsSettingsOpen }: SettingsModalProps) {
     const [autoBreak, setAutoBreak] = useState(settings.autoBreak);
 
     const onClose = () => {
-        updateSettings({
-            focusDuration: focusTime,
-            shortBreakDuration: shortBreakTime,
-            longBreakDuration: longBreakTime,
+        const focusDuration = Number(focusTime);
+        const shortBreakDuration = Number(shortBreakTime);
+        const longBreakDuration = Number(longBreakTime);
+
+        const partialSettings: Partial<TimerSettings> = {
             autoFocus,
             autoBreak,
-        });
+        };
+
+        console.log(
+            "Updating with",
+            focusDuration,
+            shortBreakDuration,
+            longBreakDuration
+        );
+
+        if (!Number.isNaN(focusDuration) && focusDuration > 0) {
+            partialSettings.focusDuration = focusDuration;
+        }
+
+        if (!Number.isNaN(shortBreakDuration) && shortBreakDuration > 0) {
+            partialSettings.shortBreakDuration = shortBreakDuration;
+        }
+
+        if (!Number.isNaN(longBreakDuration) && longBreakDuration > 0) {
+            partialSettings.longBreakDuration = longBreakDuration;
+        }
+
+        updateSettings(partialSettings);
         setIsSettingsOpen(false);
     };
 
@@ -108,23 +131,19 @@ export function SettingsModal({ setIsSettingsOpen }: SettingsModalProps) {
                 </div>
                 <div className="flex items-center gap-4 mx-auto">
                     <SettingsInput
-                        label="Focus Time"
+                        label="Focus Time (min)"
                         value={focusTime}
-                        onChange={(e) => setFocusTime(Number(e.target.value))}
+                        onChange={(e) => setFocusTime(e.target.value)}
                     />
                     <SettingsInput
-                        label="Short Break Time"
+                        label="Short Break Time (min)"
                         value={shortBreakTime}
-                        onChange={(e) =>
-                            setShortBreakTime(Number(e.target.value))
-                        }
+                        onChange={(e) => setShortBreakTime(e.target.value)}
                     />
                     <SettingsInput
-                        label="Long Break Time"
+                        label="Long Break Time (min)"
                         value={longBreakTime}
-                        onChange={(e) =>
-                            setLongBreakTime(Number(e.target.value))
-                        }
+                        onChange={(e) => setLongBreakTime(e.target.value)}
                     />
                 </div>
                 <div className="flex flex-col gap-4 mx-auto">
