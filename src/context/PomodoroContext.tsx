@@ -93,20 +93,20 @@ export const PomodoroProvider = ({ children }: { children: ReactNode }) => {
                     elapsedOverride !== undefined
                         ? elapsedOverride
                         : settings.focusDuration * 60;
-
-                if (duration < 60) return;
-
-                const newSession: SessionLog = {
-                    id: crypto.randomUUID(),
-                    startTime: new Date().toISOString(),
-                    duration: duration,
-                    mode: "focus",
-                    completed: true,
-                };
-                setHistory((prev) => [...prev, newSession]);
-
                 const newCompleted = sessionsCompleted + 1;
-                setSessionsCompleted(newCompleted);
+
+                if (duration > 0) {
+                    const newSession: SessionLog = {
+                        id: crypto.randomUUID(),
+                        startTime: new Date().toISOString(),
+                        duration: duration,
+                        mode: "focus",
+                        completed: true,
+                    };
+                    setHistory((prev) => [...prev, newSession]);
+
+                    setSessionsCompleted(newCompleted);
+                }
 
                 if (newCompleted % settings.longBreakInterval === 0) {
                     switchMode("longBreak");
