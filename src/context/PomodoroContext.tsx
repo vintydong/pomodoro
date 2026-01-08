@@ -99,7 +99,9 @@ export const PomodoroProvider = ({ children }: { children: ReactNode }) => {
                 if (duration > 0) {
                     const newSession: SessionLog = {
                         id: crypto.randomUUID(),
-                        startTime: new Date().toISOString(),
+                        startTime: new Date(
+                            Date.now() - duration * 1000
+                        ).toISOString(),
                         duration: duration,
                         mode: "focus",
                         completed: true,
