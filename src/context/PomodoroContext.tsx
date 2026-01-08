@@ -10,9 +10,9 @@ import type { TimerMode, TimerSettings, SessionLog } from "../types";
 import { DEFAULT_SETTINGS } from "../types";
 import { formatTime } from "../utils/format";
 
-// Audio asset paths (replace with your actual sound files)
-const FOCUS_END_SOUND = "/focus.mp3";
-const BREAK_END_SOUND = "/break.mp3";
+const HOMEPAGE_PATH = "/pomodoro";
+const FOCUS_END_SOUND = `${HOMEPAGE_PATH}/focus.mp3`;
+const BREAK_END_SOUND = `${HOMEPAGE_PATH}/break.mp3`;
 
 const playSound = (url: string) => {
     const audio = new Audio(url);
