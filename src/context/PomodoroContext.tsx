@@ -97,7 +97,7 @@ export const PomodoroProvider = ({ children }: { children: ReactNode }) => {
                         : settings.focusDuration * 60;
                 const newCompleted = sessionsCompleted + 1;
 
-                if (duration > 0) {
+                if (duration > 60) {
                     const newSession: SessionLog = {
                         id: crypto.randomUUID(),
                         startTime: new Date(
