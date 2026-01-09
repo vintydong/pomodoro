@@ -13,6 +13,7 @@ import { formatTime } from "../utils/format";
 const HOMEPAGE_PATH = "/pomodoro";
 const FOCUS_END_SOUND = `${HOMEPAGE_PATH}/focus.mp3`;
 const BREAK_END_SOUND = `${HOMEPAGE_PATH}/break.mp3`;
+const START_SOUND = `${HOMEPAGE_PATH}/click.mp3`;
 
 const playSound = (url: string) => {
     const audio = new Audio(url);
@@ -145,7 +146,12 @@ export const PomodoroProvider = ({ children }: { children: ReactNode }) => {
         return () => clearInterval(interval);
     }, [isActive, timeLeft, handleTimerComplete]);
 
-    const toggleTimer = () => setIsActive(!isActive);
+    const toggleTimer = () => {
+        if (!isActive) {
+            playSound(START_SOUND);
+        }
+        setIsActive(!isActive);
+    };
 
     const resetTimer = () => {
         setIsActive(false);
